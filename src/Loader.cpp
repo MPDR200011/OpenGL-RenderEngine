@@ -1,7 +1,7 @@
 #include "Loader.h"
 
 
-GLuint Loader::createVAO(std::vector<float> &vertexes, std::vector<int> &indices) {
+GLuint Loader::createVAO(std::vector<double> &vertexes, std::vector<int> &indices) {
     GLuint vaoID = genVao();
     bindIndicesBuffer(indices);
     storeDataInAttributeList(0, 3, vertexes);
@@ -18,7 +18,7 @@ void Loader::bindIndicesBuffer(const std::vector<int> &indices) {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices[0], GL_STATIC_DRAW);
 }
 
-void Loader::storeDataInAttributeList(GLuint index, int coordSize, const std::vector<float> &data) {
+void Loader::storeDataInAttributeList(GLuint index, int coordSize, const std::vector<double> &data) {
     GLuint vertexVboID;
     glGenBuffers(1, &vertexVboID);
     glBindBuffer(GL_ARRAY_BUFFER, vertexVboID);

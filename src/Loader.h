@@ -11,13 +11,13 @@ class Loader {
 public:
     ~Loader();
 
-    GLuint createVAO(std::vector<float> &vertexes, std::vector<int> &indices);
+    GLuint createVAO(std::vector<double> &vertexes, std::vector<int> &indices);
 
 private:
     GLuint genVao();
     void unbindVAO();
 
-    void storeDataInAttributeList(GLuint index, int coordSize, const std::vector<float> &data);
+    void storeDataInAttributeList(GLuint index, int coordSize, const std::vector<double> &data);
 
     void bindIndicesBuffer(const std::vector<int> &indices);
 };
