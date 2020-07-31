@@ -1,5 +1,4 @@
-#ifndef OPENGL_TESTS_LOADER_H
-#define OPENGL_TESTS_LOADER_H
+#pragma once
 
 #include <vector>
 #include <GL/glew.h>
@@ -11,7 +10,7 @@ class Loader {
 public:
     ~Loader();
 
-    GLuint createVAO(std::vector<double> &vertexes, std::vector<int> &indices);
+    GLuint createVAO(std::vector<double> &vertexes, std::vector<double>& normals, std::vector<double>& tex, std::vector<unsigned int> &indices);
 
 private:
     GLuint genVao();
@@ -19,7 +18,5 @@ private:
 
     void storeDataInAttributeList(GLuint index, int coordSize, const std::vector<double> &data);
 
-    void bindIndicesBuffer(const std::vector<int> &indices);
+    void bindIndicesBuffer(const std::vector<unsigned int> &indices);
 };
-
-#endif //OPENGL_TESTS_LOADER_H
