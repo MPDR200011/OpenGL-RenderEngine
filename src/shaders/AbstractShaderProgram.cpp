@@ -94,7 +94,7 @@ GLuint AbstractShaderProgram::loadShader(const std::string &path, GLenum type) {
         glGetShaderInfoLog(id, logSize, &temp, log);
         std::cerr << log << std::endl;
         
-        delete log;
+        delete[] log;
     } 
     
     return id;

@@ -22,13 +22,14 @@ message(STATUS "GLM: " glm)
 set(SRC
     src/Loader.cpp
     src/Window.cpp
+    src/obj/parsing.cpp
     src/shaders/AbstractShaderProgram.cpp
     src/shaders/static/StaticShaderProgram.cpp
 )
 add_executable(engine ${SRC} src/main.cpp)
 
 target_compile_options(engine
-    PUBLIC -std=c++17 -Wall -pedantic 
+    PUBLIC -std=c++2a -Wall -pedantic 
 )
 
 add_executable(tests ${SRC} test/main.cpp)
@@ -36,7 +37,7 @@ add_executable(tests ${SRC} test/main.cpp)
 target_include_directories(tests PRIVATE src/)
 
 target_compile_options(tests
-    PUBLIC -std=c++17
+    PUBLIC -std=c++2a
 )
 
 # Link glfw

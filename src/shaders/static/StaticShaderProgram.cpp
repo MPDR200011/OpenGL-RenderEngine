@@ -13,10 +13,11 @@ void StaticShaderProgram::loadProjectionMatrix(const glm::mat4& matrix) {
 
 void StaticShaderProgram::bindAttributes() {
     bindAttribute(0, "position");
-    bindAttribute(1, "color");
+    bindAttribute(1, "normal");
+    bindAttribute(2, "textureCoords");
 }
 
 void StaticShaderProgram::getAllUniformLocations() {
     this->transformLocation = getUniformLocation("transformationMatrix");
-    this->viewLocation = getUniformLocation("projectionMatrix");
+    this->viewLocation = getUniformLocation("viewMatrix");
 }

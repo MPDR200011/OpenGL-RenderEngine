@@ -8,6 +8,8 @@
 #include "Window.hpp"
 #include "Loader.h"
 #include "shaders/static/StaticShaderProgram.h"
+#include "obj/parsing.hpp"
+#include <glm/gtc/matrix_transform.hpp>
 
 void prepareCanvas() {
     glEnable(GL_DEPTH_TEST);
@@ -18,9 +20,12 @@ void drawVAO(GLuint vaoID) {
     glBindVertexArray(vaoID);
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
 
     glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
+    glDisableVertexAttribArray(2);
+    glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(0);
     glBindVertexArray(0);
 }
@@ -38,36 +43,19 @@ int main() {
 
     Loader loader;
 
-    std::vector<float> vertexes {
-            -0.5f,-0.5f, 0,
-             0.5f,-0.5f, 0,
-             0   , 0.5f, 0
-    };
+    Mesh cubeMesh = obj::parse("cube.obj");
 
-    std::vector<int> indices {
-            0,1,2
-    };
+    GLuint cube = loader.createVAO(cubeMesh.positions, cubeMesh.normals, cubeMesh.texCoords, cubeMesh.indices);
 
-    float colors[] = {
-            1,0,0,
-            0,1,0,
-            0,0,1,
-    };
+    glm::mat4 trans;
+    trans = glm::translate(trans, {0,0,0});
 
-    GLuint triangle = loader.createVAO(vertexes, indices);
+    glm::mat4 view = glm::frustum(-1,1,-1,1,1,500);
+    view = glm::translate(view, {0,0,3});
 
-    glBindVertexArray(triangle);
+    glBindVertexArray(cube);
 
-    GLuint colorsVboID;
-    glGenBuffers(1, &colorsVboID);
-    glBindBuffer(GL_ARRAY_BUFFER, colorsVboID);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), &colors[0], GL_STATIC_DRAW);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glBindVertexArray(0);
-
-    StaticShaderProgram shader("assets/shaders/quickVertex.glsl", "assets/shaders/quickFragment.glsl");
+    StaticShaderProgram shader("assets/shaders/static.vert", "assets/shaders/static.frag");
     shader.init();
 
     glViewport(0, 0, window.getWidth(), window.getHeight());
@@ -78,8 +66,9 @@ int main() {
         prepareCanvas();
 
         shader.start();
-
-        drawVAO(triangle);
+        shader.loadTransformation(trans);
+        shader.loadProjectionMatrix(view);
+        drawVAO(cube);
 
         shader.stop();
 
