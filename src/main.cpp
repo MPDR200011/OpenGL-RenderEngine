@@ -59,8 +59,8 @@ int main() {
     shader.init();
 
     glViewport(0, 0, window.getWidth(), window.getHeight());
-    /* Loop until the user closes the window */
 
+    /* Loop until the user closes the window */
     while (!window.shouldClose()) {
         /* Render here */
         prepareCanvas();
