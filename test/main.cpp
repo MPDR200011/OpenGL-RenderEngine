@@ -2,7 +2,7 @@
 #include "obj/parsing.hpp"
 
 int main() {
-  Mesh mesh = obj::parse("cube.obj");
+  Mesh mesh = obj::parse("square.obj");
 
   std::cout << mesh.vertices.size() << std::endl;
   std::cout << mesh.indices.size() << std::endl;
