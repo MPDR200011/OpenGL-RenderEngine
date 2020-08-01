@@ -3,6 +3,8 @@
 #include <sstream>
 #include <cstdio>
 #include "parsing.hpp"
+#include <iostream>
+#include <glm/gtx/string_cast.hpp>
 
 Vertex::Vertex(size_t pos, size_t normal, size_t tex) : pos(pos), normal(normal), tex(tex) {} 
 
@@ -24,7 +26,7 @@ std::vector<std::string> split(std::string const& str, const char del) {
 }
 
 Mesh obj::parse(std::string const& obj_path) {
-  std::map<size_t, size_t> vertIdx_to_vectIdx;
+  std::map<VertKey, size_t> vertKey_to_idx;
   std::vector<Vertex> vertices;
 
   std::vector<glm::vec3> positions;
@@ -77,37 +79,17 @@ Mesh obj::parse(std::string const& obj_path) {
       for (int i = 1; i < 4; ++i) {
         size_t vertexIdx, texIdx, normalIdx;
         std::sscanf(tokens[i].c_str(), "%lu/%lu/%lu", &vertexIdx, &texIdx, &normalIdx);
+        vertexIdx--;
+        texIdx--;
+        normalIdx--;
 
-        Vertex vert(vertexIdx, normalIdx, texIdx);
-
-        //check if a vertex with the same position already exists
-        size_t idx = indices.size();
-        if (auto [it, inserted] = vertIdx_to_vectIdx.emplace(vertexIdx,  idx); !inserted) {
-          //if it exists, get its index
-          idx = it->second;
-        } else {
-          //if not add it to the vector
-          vertices.push_back(vert);
+        VertKey key = std::make_tuple(vertexIdx, normalIdx, texIdx);
+        auto [it, inserted] = vertKey_to_idx.emplace(key, vertices.size());
+        if (inserted) {
+          vertices.emplace_back(vertexIdx, normalIdx, texIdx);
         }
 
-        //find vertex in same position with same normal and tex coords
-        size_t prev;
-        std::optional<size_t> curr = idx;
-        while (curr && vert != vertices[*curr]) {
-          prev = *curr;
-          curr = vertices[*curr].next_copy_idx;
-        }
-
-        //if it didnt find one create it
-        if (!curr) {
-          idx = vertices.size();
-          vertices.push_back(vert);
-          vertices[prev].next_copy_idx = idx; //need to add vertex to the chain
-        } else {
-          idx = *curr;
-        }
-
-        indices.push_back(idx); //add index to the indices
+        indices.push_back(it->second);
       }
     }
   } while (std::getline(obj_file, line));

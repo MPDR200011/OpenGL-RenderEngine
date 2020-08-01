@@ -1,4 +1,5 @@
 #include "StaticShaderProgram.h"
+#include <iostream>
 
 StaticShaderProgram::StaticShaderProgram(const std::string &vertexPath, const std::string &fragmentPath)
         : AbstractShaderProgram(vertexPath, fragmentPath) {}

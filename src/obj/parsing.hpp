@@ -3,13 +3,12 @@
 #include <glm/vec2.hpp>
 #include <string>
 #include <vector>
+#include <tuple>
 #include <optional>
 
 struct Vertex {
   explicit Vertex() {};
   Vertex(size_t, size_t, size_t);
-
-  std::optional<size_t> next_copy_idx;
 
   size_t pos;
   size_t normal;
@@ -17,13 +16,15 @@ struct Vertex {
 };
 bool operator==(Vertex const& v1,Vertex const& v2);
 
+typedef std::tuple<size_t, size_t, size_t> VertKey;
+
 struct Mesh {
   std::vector<Vertex> vertices;
 
   std::vector<unsigned int> indices;
-  std::vector<double> positions;
-  std::vector<double> normals;
-  std::vector<double> texCoords;
+  std::vector<float> positions;
+  std::vector<float> normals;
+  std::vector<float> texCoords;
 };
 
 namespace obj {
