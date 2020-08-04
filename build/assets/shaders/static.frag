@@ -7,12 +7,12 @@ in vec3 passNormal;
 out vec4 out_Colour;
 
 void main (void) {
+  vec3 unitNormal = normalize(passNormal);
   vec3 lightColor = vec3(1.0, 1.0, 1.0);
-  vec4 color = vec4(1.0,0,0,1.0);
+  vec4 color = vec4(unitNormal, 1.0);
 
   vec3 unitToCam = normalize(toCam);
   vec3 unitToLight = normalize(toLight);
-  vec3 unitNormal = normalize(passNormal);
 
   float brightness = max(dot(unitNormal, unitToLight), 0.5);
   vec3 diffuse =  brightness * lightColor;

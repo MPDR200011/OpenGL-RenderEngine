@@ -5,12 +5,13 @@
 #include <string>
 #include <sstream>
 #include <cmath>
+#include <chrono>
 #include "Window.hpp"
 #include "Loader.h"
 #include "shaders/static/StaticShaderProgram.h"
 #include "obj/parsing.hpp"
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/string_cast.hpp>
+#include "Camera.hpp"
 
 void prepareCanvas() {
   glEnable(GL_DEPTH_TEST);
@@ -44,21 +45,15 @@ int main() {
 
   Loader loader;
 
-  Mesh cubeMesh = obj::parse("assets/objs/sphere.obj");
+  Mesh cubeMesh = obj::parse("assets/objs/cube.obj");
 
   GLuint cube = loader.createVAO(cubeMesh.positions, cubeMesh.normals, cubeMesh.texCoords, cubeMesh.indices);
 
   glm::mat4 trans = glm::identity<glm::mat4>();
   trans = glm::translate(trans, {0,0,-3});
-//  trans = glm::rotate(trans, 1.0F, {0,1,0});
-//  trans = glm::rotate(trans, 1.0F, {0,0,1});
 
-  std::cout << glm::to_string(trans) << std::endl;
 
-  glm::mat4 view = glm::perspectiveFov(glm::pi<float>() / 2, (float) window.getWidth(), (float)window.getHeight(), 1.0F, 500.0F);
-  //view = glm::translate(view, {0,0,3});
-  std::cout << glm::to_string(view) << std::endl;
-
+  Camera cam;
 
   glBindVertexArray(cube);
 
@@ -69,14 +64,18 @@ int main() {
 
   /* Loop until the user closes the window */
   while (!window.shouldClose()) {
-    trans = glm::rotate(trans, 0.01F, { 0.0, 1.0, 0.0 });
-    trans = glm::rotate(trans, 0.01F, { 0.0, 0.0, 1.0 });
+    auto start = std::chrono::high_resolution_clock::now();
+    //trans = glm::rotate(trans, 0.01F, { 0.0, 1.0, 0.0 });
+    //trans = glm::rotate(trans, 0.01F, { 0.0, 0.0, 1.0 });
+
+    cam.rotateY(0.01F);
     /* Render here */
     prepareCanvas();
 
     shader.start();
     shader.loadTransformation(trans);
-    shader.loadProjectionMatrix(view);
+    shader.loadProjectionMatrix(window.getProjectionMatrix());
+    shader.loadViewMatrix(cam.getViewMatrix());
     drawVAO(cube, cubeMesh.indices.size());
 
     shader.stop();
@@ -86,6 +85,8 @@ int main() {
 
     /* Poll for and process events */
     glfwPollEvents();
+    auto end = std::chrono::high_resolution_clock::now();
+    auto delta = end-start;
   }
 
   glfwTerminate();

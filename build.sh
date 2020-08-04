@@ -3,7 +3,7 @@
 RELEASE_TYPE="Release"
 
 if [ $# == "0" ]; then
-    RELEASE_TYPE="Release"
+    RELEASE_TYPE="Debug"
 else
     RELEASE_TYPE=$1
 fi

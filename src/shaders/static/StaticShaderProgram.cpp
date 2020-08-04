@@ -9,6 +9,10 @@ void StaticShaderProgram::loadTransformation(const glm::mat4& matrix) {
 }
 
 void StaticShaderProgram::loadProjectionMatrix(const glm::mat4& matrix) {
+    AbstractShaderProgram::loadMatrix4(projectionLocation, matrix);
+}
+
+void StaticShaderProgram::loadViewMatrix(const glm::mat4& matrix) {
     AbstractShaderProgram::loadMatrix4(viewLocation, matrix);
 }
 
@@ -20,5 +24,6 @@ void StaticShaderProgram::bindAttributes() {
 
 void StaticShaderProgram::getAllUniformLocations() {
     this->transformLocation = getUniformLocation("transformationMatrix");
+    this->projectionLocation = getUniformLocation("projectionMatrix");
     this->viewLocation = getUniformLocation("viewMatrix");
 }

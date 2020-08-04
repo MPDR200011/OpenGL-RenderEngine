@@ -1,5 +1,4 @@
-#ifndef OPENGL_TESTS_STATICSHADERPROGRAM_H
-#define OPENGL_TESTS_STATICSHADERPROGRAM_H
+#pragma once
 
 #include "../AbstractShaderProgram.h"
 
@@ -11,6 +10,7 @@ public:
 
     void loadTransformation(const glm::mat4& matrix);
     void loadProjectionMatrix(const glm::mat4& matrix);
+    void loadViewMatrix(const glm::mat4& matrix);
 
 protected:
     virtual void bindAttributes() override;
@@ -18,8 +18,6 @@ protected:
     void getAllUniformLocations() override;
 
     GLuint transformLocation;
+    GLuint projectionLocation;
     GLuint viewLocation;
 };
-
-
-#endif //OPENGL_TESTS_STATICSHADERPROGRAM_H

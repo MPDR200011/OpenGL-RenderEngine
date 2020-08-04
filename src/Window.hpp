@@ -2,20 +2,26 @@
 
 #include <string>
 #include <GLFW/glfw3.h>
+#include <glm/mat4x4.hpp>
 
 class Window {
 public:
     Window(unsigned width, unsigned height, std::string title);
 
-    bool shouldClose();
+    void regenProjection();
+
+    bool shouldClose() const;
     void swapBuffers();
 
-    unsigned getWidth();
-    unsigned getHeight();
+    unsigned getWidth() const;
+    unsigned getHeight() const;
+
+    glm::mat4 getProjectionMatrix() const;
 
 private:
     unsigned width;
     unsigned height;
     std::string title;
+    glm::mat4 projectionMatrix;
     GLFWwindow *window;
 };

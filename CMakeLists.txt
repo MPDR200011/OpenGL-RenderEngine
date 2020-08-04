@@ -22,6 +22,7 @@ message(STATUS "GLM: " glm)
 set(SRC
     src/Loader.cpp
     src/Window.cpp
+    src/Camera.cpp
     src/obj/parsing.cpp
     src/shaders/AbstractShaderProgram.cpp
     src/shaders/static/StaticShaderProgram.cpp

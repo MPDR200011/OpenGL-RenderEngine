@@ -9,6 +9,7 @@ out vec3 toLight;
 out vec3 passNormal;
 
 uniform mat4 transformationMatrix;
+uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 
 void main(void) {
@@ -18,10 +19,10 @@ void main(void) {
   vec4 posRelToCam = viewMatrix * worldPosition;
 
   //Position
-  gl_Position =  posRelToCam;
+  gl_Position =  projectionMatrix * posRelToCam;
 
   passNormal = (transformationMatrix * vec4(normal, 0.0)).xyz;
-  toCam = -worldPosition.xyz;
+  toCam = (inverse(viewMatrix) * vec4(0.0,0.0,0.0,1.0)).xyz - worldPosition.xyz;
   toLight = lightPosition - worldPosition.xyz;
 }
 
